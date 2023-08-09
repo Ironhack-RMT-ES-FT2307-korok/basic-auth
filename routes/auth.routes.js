@@ -61,7 +61,7 @@ router.post("/signup", async (req, res, next) => {
     // lo ultimo que ocurrira cuando se ejecute todo...
     res.redirect("/auth/login")
   } catch (error) {
-    
+    next(error)
   }
 
 
@@ -69,9 +69,52 @@ router.post("/signup", async (req, res, next) => {
 })
 
 // GET "/auth/login" => renderiza al usuario un formulario de acceso
+router.get("/login", (req, res, next) => {
+  res.render("auth/login.hbs")
+})
 
 // POST "/auth/login" => recibir las credenciales del usuario y validarlo/autenticarlo
+router.post("/login", async (req, res, next) => {
 
+  console.log(req.body)
+  const { email, password } = req.body
+
+  // Que los campos no esten vacios (opcional)
+
+  try {
+    // debemos buscar un usuario con ese correo electronico
+    const foundUser = await User.findOne({ email: email })
+    console.log(foundUser)
+    if (foundUser === null) {
+      res.status(400).render("auth/login.hbs", {
+        errorMessage: "Usuario no existe con ese correo"
+      })
+      return; // detener la ejecucion de la ruta
+    }
+  
+  
+    // Que la contraseña sea la correcta
+    // lo que escribe el usuario en el campo: password
+    // la contraseña cifrada de la DB: foundUser.password
+    const isPasswordCorrect = await bcrypt.compare(password, foundUser.password)
+    console.log(isPasswordCorrect)
+    if (isPasswordCorrect === false) {
+      res.status(400).render("auth/login.hbs", {
+        errorMessage: "Contraseña no valida"
+      })
+      return; // detener la ejecucion de la ruta
+    }
+  
+  
+  
+    // Si todo sale bien...
+    res.redirect("/")
+    
+  } catch (error) {
+    next(error)
+  }
+
+})
 
 
 module.exports = router;
