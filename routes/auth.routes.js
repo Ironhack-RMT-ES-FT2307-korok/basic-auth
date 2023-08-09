@@ -84,7 +84,7 @@ router.post("/login", async (req, res, next) => {
   try {
     // debemos buscar un usuario con ese correo electronico
     const foundUser = await User.findOne({ email: email })
-    console.log(foundUser)
+    console.log("foundUser", foundUser)
     if (foundUser === null) {
       res.status(400).render("auth/login.hbs", {
         errorMessage: "Usuario no existe con ese correo"
@@ -97,7 +97,8 @@ router.post("/login", async (req, res, next) => {
     // lo que escribe el usuario en el campo: password
     // la contraseña cifrada de la DB: foundUser.password
     const isPasswordCorrect = await bcrypt.compare(password, foundUser.password)
-    console.log(isPasswordCorrect)
+    console.log(isPasswordCorrect) // true or false
+
     if (isPasswordCorrect === false) {
       res.status(400).render("auth/login.hbs", {
         errorMessage: "Contraseña no valida"
@@ -106,13 +107,38 @@ router.post("/login", async (req, res, next) => {
     }
   
   
+    // aqui ya hemos autenticado al usuario => abrimos una sesion del usuario
+    // ...
+    // con la configuracion de config/index.js ya tenemos acceso a crear sesiones y buscar sesiones
+
+    // crear una sesion activa del usuario
+    req.session.user = {
+      _id: foundUser._id,
+      email: foundUser.email
+    }
+    // guardamos en la sesion informacion del usuario que no deberia cambiar
+
+    // el metodo .save() se invoca para esperar que se crea la sesion antes de hacer lo siguiente
+    req.session.save(() => {
+
+      // Si todo sale bien...
+      res.redirect("/")
+      // ! DESPUES DE CREAR LA SESION, TENEMOS ACCESO A REQ.SESSION.USER EN CUALQUIER RUTA DE MI SERVIDOR
+    })
+
   
-    // Si todo sale bien...
-    res.redirect("/")
-    
   } catch (error) {
     next(error)
   }
+
+})
+
+// GET "/auth/logout" => le permite al usuario cerrar la sesion activa
+router.get("/logout", (req, res, next) => {
+
+  req.session.destroy(() => {
+    res.redirect("/")
+  })
 
 })
 
