@@ -122,7 +122,7 @@ router.post("/login", async (req, res, next) => {
     req.session.save(() => {
 
       // Si todo sale bien...
-      res.redirect("/")
+      res.redirect("/user")
       // ! DESPUES DE CREAR LA SESION, TENEMOS ACCESO A REQ.SESSION.USER EN CUALQUIER RUTA DE MI SERVIDOR
     })
 
