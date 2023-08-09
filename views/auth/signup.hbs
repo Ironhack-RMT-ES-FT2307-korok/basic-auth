@@ -2,7 +2,7 @@
 
   <h3>Formulario de registro</h3>
 
-  <form action="">
+  <form action="/auth/signup" method="post">
 
     <label for="username">Nombre</label>
     <input type="text" name="username">
@@ -10,17 +10,26 @@
     <br>
 
     <label for="email">Correo Electronico</label>
-    <input type="text" name="email">
+    <input type="email" name="email">
 
     <br>
 
     <label for="password">Contraseña</label>
-    <input type="text" name="password">
+    <input type="password" name="password">
 
     <br>
 
+    {{!-- <select name="" id="">
+      {{#each this.countries}}
+        <option value=""></option>
+      {{/each}}
+    </select> --}}
+
     <button>Registro</button>
 
+    {{#if this.errorMessage}} 
+      <p>{{this.errorMessage}}</p>
+    {{/if}}
 
   </form>
 
