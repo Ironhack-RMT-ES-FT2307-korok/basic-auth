@@ -16,4 +16,8 @@ router.use("/auth", authRouter)
 const userRouter = require("./user.routes.js")
 router.use("/user", userRouter)
 
+// aqui creo una ruta nueva de desarrollo
+console.log("probando")
+
 module.exports = router;
+
