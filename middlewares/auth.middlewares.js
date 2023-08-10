@@ -11,6 +11,16 @@ function isLoggedIn(req, res, next) {
 
 }
 
+function isAdmin(req, res, next) {
+
+  if (req.session.user.role === "admin") {
+    next() // adelante
+  } else {
+    res.redirect("/auth/login")
+  }
+
+}
+
 
 function updateLocals(req, res, next) {
 
@@ -28,5 +38,6 @@ function updateLocals(req, res, next) {
 
 module.exports = {
   isLoggedIn: isLoggedIn,
-  updateLocals: updateLocals
+  updateLocals: updateLocals,
+  isAdmin: isAdmin
 }

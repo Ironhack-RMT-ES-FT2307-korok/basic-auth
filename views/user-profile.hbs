@@ -6,4 +6,18 @@
   <p>tu correo es: {{user.email}}</p>
   ...
 
+  <img src="{{user.profilePic}}" alt="image-perfil" width="100px">
+
+
+  <h3>Cambiar la imagen de perfil</h3>
+  <form action="/user/upload-profile-pic" method="post" enctype="multipart/form-data">
+  {{!-- enctype="multipart/form-data" permite enviar archivos como imagenes, video, pdf, audios --}}
+
+    <label for="profilePic">Imagen de Perfil</label>
+    <input type="file" name="profilePic">
+
+    <button>Agregar</button>
+
+  </form>
+
 </div>

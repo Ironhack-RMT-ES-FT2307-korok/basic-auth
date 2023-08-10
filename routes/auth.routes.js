@@ -114,7 +114,8 @@ router.post("/login", async (req, res, next) => {
     // crear una sesion activa del usuario
     req.session.user = {
       _id: foundUser._id,
-      email: foundUser.email
+      email: foundUser.email,
+      role: foundUser.role
     }
     // guardamos en la sesion informacion del usuario que no deberia cambiar
 

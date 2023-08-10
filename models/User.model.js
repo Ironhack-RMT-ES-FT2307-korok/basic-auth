@@ -19,6 +19,14 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"], // enum delimita los unicos posibles valores
+      default: "user"
+    },
+    profilePic: {
+      type: String // aqui almacenamos el URL de la imagen que viene de cloudinary
     }
   },
   {
